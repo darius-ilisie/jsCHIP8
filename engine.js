@@ -137,20 +137,20 @@ class CHIP8 {
             this.PC+=2;
         }
 
-        this.run[0xC] = (opcode) => { //RND Vx, byte
-            if (this.DEBUG == true) {
-                console.log("[+] Exec RND opcode: " + opcode.toString(16));
-            }
-            this.V[(opcode & 0x0F00) >> 8] = Math.floor(Math.random() * 0x100) & (opcode & 0x00FF);
-
-            this.PC += 2;
-        }
-
         this.run[0xA] = (opcode) => { //LD I, addr
             if (this.DEBUG == true) {
                 console.log("[+] Exec LD I opcode: " + opcode.toString(16));
             }
             this.I = opcode & 0x0FFF;
+
+            this.PC += 2;
+        }
+
+        this.run[0xC] = (opcode) => { //RND Vx, byte
+            if (this.DEBUG == true) {
+                console.log("[+] Exec RND opcode: " + opcode.toString(16));
+            }
+            this.V[(opcode & 0x0F00) >> 8] = Math.floor(Math.random() * 0x100) & (opcode & 0x00FF);
 
             this.PC += 2;
         }
@@ -178,6 +178,7 @@ class CHIP8 {
                 }
             }
 
+            this._draw_canvas();
             this.PC+=2;
         }
 
@@ -232,9 +233,6 @@ class CHIP8 {
                 if (this.DEBUG == true) {
                     console.log("[+] Exec LD [I] opcode: " + opcode.toString(16));
                 }
-                /*this.V.forEach(e => {
-                    this.mem[this.I] = e;
-                })*/
                 for(var i = 0; i <= (opcode & 0x0F00) >> 8; i++) {
                     this.mem[this.I+i] = this.V[i];
                 }
@@ -288,6 +286,20 @@ class CHIP8 {
     //Not used!
     _bytes_to_numberLE(arr) {
         return (arr[1] * 0x100 + arr[0]);
+    }
+
+    _draw_canvas() {
+        var cl = [];
+        
+        cl[0] = color(0);
+        cl[1] = color(255);
+        for(var y = 0; y < this.pix_ratio * 32; y++) { //IT WORKS! :#
+            for(var x = 0; x < this.pix_ratio * 64; x++) {
+                set(x, y, cl[this.vscreen[Math.floor(y/this.pix_ratio)*64 + Math.floor(x/this.pix_ratio)]]);
+            }
+        }
+
+        updatePixels();
     }
 
     _undef(op) {
