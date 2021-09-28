@@ -6,6 +6,7 @@
     <body>
         <button onclick="p.init()">Start</button>
         <button onclick="p.stop()">Stop</button>
+        <input type="range" min="1" max="10" id="freq" onchange="p.updateFreq()"/>
         <input type="file" id="rom" />
         <br />
         <script src="keyboard-lib.js"></script>

@@ -2,6 +2,7 @@ class KeyboardArray {
     constructor() {
         this.ks = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         var kb = [];
+        this.last_key = undefined;
             kb[54] = 0x1;
             kb[53] = 0x2;
             kb[54] = 0x3;
@@ -22,12 +23,22 @@ class KeyboardArray {
     }
 
     async keyU(e) {
+        this.last_key = undefined;
         console.log(e);
+
+        console.log("Keypressed: " + this.last_key);
         this.ks[this.kb[e.keyCode]] = 0;
     }
 
     async keyD(e) {
         console.log(e);
+        this.last_key = this.kb[e.keyCode];
+
+        console.log("Keypressed: " + this.last_key);
         this.ks[this.kb[e.keyCode]] = 1;
+    }
+
+    async getPressedKey() {
+        return this.last_key;
     }
 }

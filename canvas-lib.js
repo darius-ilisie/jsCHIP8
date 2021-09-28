@@ -1,3 +1,11 @@
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function sleepUntil(d) {
+    return sleep(d-Date.now());
+}
+
 class GraphicsLibrary {
     constructor(w, h) {
         var body = document.getElementsByTagName('body')[0];
